@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:weather_app/clients/weather_api_client.dart';
 import 'package:weather_app/screens/next_5_days_screen.dart';
+import 'package:weather_app/screens/tomorrow_screen.dart';
 import '../models/weather_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/reusables.dart';
@@ -179,7 +180,13 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                                 setState(() {
                                   _index = index;
                                 });
-                                if (_index == 2) {
+                                if (_index == 1) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          const TomorrowWeather()));
+                                  _index = 0;
+                                  setState(() {});
+                                } else if (_index == 2) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => const Next5Days()));
                                   _index = 0;
