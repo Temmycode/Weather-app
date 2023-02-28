@@ -24,7 +24,7 @@ class Weather {
     humidity = json["main"]["humidity"];
     coord = json["coord"] != null ? Coord.fromJson(json["coord"]) : null;
     if (json['weather'] != null) {
-      weather = <WeatherModel>[].cast<WeatherModel>();
+      weather = <WeatherModel>[];
       json['weather'].forEach((v) {
         weather!.add(WeatherModel.fromJson(v));
       });

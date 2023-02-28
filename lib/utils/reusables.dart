@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/utils/small_text.dart';
-import 'package:weather_app/utils/text.dart';
-
 import 'app_colors.dart';
 
 Widget reuseableColumn(String image, String text, String smallText) {
@@ -13,9 +11,10 @@ Widget reuseableColumn(String image, String text, String smallText) {
         scale: 20,
         //color: color,
       ),
-      AppText(
+      SmallText(
         text: text,
         size: 20,
+        color: AppColors.whiteColor,
       ),
       SmallText(text: smallText),
     ],
@@ -25,7 +24,7 @@ Widget reuseableColumn(String image, String text, String smallText) {
 List<String> weatherOptions = [
   "Today",
   "Tomorrow",
-  "Next 10 days",
+  "Next 5 days",
 ];
 
 Widget reusableContainer(String text, IconData icon, String temperature) {
@@ -53,4 +52,14 @@ Widget reusableContainer(String text, IconData icon, String temperature) {
       ],
     ),
   );
+}
+
+List<DateTime> getnext5Days() {
+  List<DateTime> next5Days = [];
+  DateTime now = DateTime.now();
+
+  for (int i = 0; i < 5; i++) {
+    next5Days.add(now.add(Duration(days: i)));
+  }
+  return next5Days;
 }

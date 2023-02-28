@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:weather_app/clients/weather_api_client.dart';
+import 'package:weather_app/screens/next_5_days_screen.dart';
 import '../models/weather_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/reusables.dart';
@@ -54,14 +55,13 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
         child: FutureBuilder(
           future: getData(),
           builder: (context, snapshot) {
-            //if (snapshot.hasData) {
             if (snapshot.connectionState == ConnectionState.done) {
               return LiquidPullToRefresh(
                 color: AppColors.blueishColor,
                 backgroundColor: AppColors.blackColor,
                 animSpeedFactor: 2,
                 showChildOpacityTransition: false,
-                height: 150,
+                height: 120,
                 onRefresh: handleRefresh,
                 child: ListView(
                   children: [
@@ -119,7 +119,7 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                               children: [
                                 // temperature of the enviroment
                                 AppText(
-                                  text: "${data!.temp}",
+                                  text: "${data!.temp!.ceil()}°",
                                   weight: FontWeight.bold,
                                   size: 50,
                                   letterspacing: 4.0,
@@ -179,12 +179,17 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                                 setState(() {
                                   _index = index;
                                 });
+                                if (_index == 2) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => const Next5Days()));
+                                  _index = 0;
+                                  setState(() {});
+                                }
                               },
                               child: Container(
                                 margin: const EdgeInsets.only(right: 20),
                                 height: 20,
                                 child: Column(
-                                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       weatherOptions[index],
