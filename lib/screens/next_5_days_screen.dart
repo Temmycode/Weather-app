@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intl/intl.dart';
 import 'package:weather_app/clients/weather_api_client.dart';
 import 'package:weather_app/models/future_weather_model.dart';
-import 'package:weather_app/models/weather_model.dart';
+import 'package:weather_app/utils/dimension.dart';
 import '../utils/app_colors.dart';
 import '../utils/reusables.dart';
 import '../utils/small_text.dart';
@@ -17,7 +18,7 @@ class Next5Days extends StatefulWidget {
 
 class _Next5DaysState extends State<Next5Days> {
   FutureWeather? _data;
-  WeahterApiClient _weather = WeahterApiClient();
+  final WeahterApiClient _weather = WeahterApiClient();
   getFutureData() async {
     _data = await _weather.get5DayData();
   }
@@ -41,9 +42,9 @@ class _Next5DaysState extends State<Next5Days> {
                   // App bar
                   Padding(
                     padding: const EdgeInsets.only(
-                      right: 10.0,
-                      top: 15.0,
-                      left: 10.0,
+                      right: Dimensions.width10,
+                      top: Dimensions.height15,
+                      left: Dimensions.width10,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,11 +54,12 @@ class _Next5DaysState extends State<Next5Days> {
                             Navigator.of(context).pop();
                           },
                           child: Container(
-                              height: 50,
-                              width: 50,
+                              height: Dimensions.height50,
+                              width: Dimensions.width50,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15),
+                                borderRadius:
+                                    BorderRadius.circular(Dimensions.radius15),
                                 color: AppColors.blueishColor.withOpacity(0.2),
                               ),
                               child: Icon(
@@ -72,8 +74,8 @@ class _Next5DaysState extends State<Next5Days> {
                           weight: FontWeight.normal,
                         ),
                         Container(
-                          height: 50,
-                          width: 50,
+                          height: Dimensions.height50,
+                          width: Dimensions.width50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
                             color: AppColors.blueishColor.withOpacity(0.2),
@@ -88,7 +90,7 @@ class _Next5DaysState extends State<Next5Days> {
                     ),
                   ),
                   const SizedBox(
-                    height: 30,
+                    height: Dimensions.height30,
                   ),
                   // temperature information
                   Column(
@@ -109,23 +111,27 @@ class _Next5DaysState extends State<Next5Days> {
                           SmallText(
                               text:
                                   "${_data!.information![0].weatherInfo![0].description}"),
-                          Icon(
-                            Icons.storm,
-                            color: Colors.amber[200],
-                          )
+                          SizedBox(
+                              height: Dimensions.height30,
+                              width: Dimensions.height30,
+                              child: Image.network(
+                                '${_data!.information![0].iconUrl}',
+                                fit: BoxFit.fitHeight,
+                              )),
                         ],
                       ),
                     ],
                   ),
                   const SizedBox(
-                    height: 20,
+                    height: Dimensions.height20,
                   ),
                   // weather information
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    height: 100,
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: Dimensions.width20),
+                    height: Dimensions.height100,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15),
+                      borderRadius: BorderRadius.circular(Dimensions.radius15),
                       color: AppColors.blueishColor.withOpacity(0.15),
                     ),
                     child: Row(
@@ -141,55 +147,14 @@ class _Next5DaysState extends State<Next5Days> {
                     ),
                   ),
                   const SizedBox(
-                    height: 25,
+                    height: Dimensions.height55,
                   ),
-                  //todays information
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 20.0, right: 20.0, bottom: 15.0),
-                    child: ListTile(
-                      leading: SmallText(
-                        text: "Today",
-                        color: AppColors.whiteColor,
-                      ),
-                      title: Center(
-                        child: Container(
-                          width: 100,
-                          //alignment: Alignment.center,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              SmallText(
-                                text:
-                                    "${_data!.information![0].tempMin!.ceil()}",
-                              ),
-                              Container(
-                                width: 40,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  color: AppColors.blueishColor,
-                                  borderRadius: BorderRadius.circular(15),
-                                ),
-                              ),
-                              SmallText(
-                                text:
-                                    "${_data!.information![0].tempMax!.ceil()}",
-                                color: AppColors.whiteColor,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      trailing: Icon(
-                        Icons.sunny_snowing,
-                        color: AppColors.whiteColor,
-                      ),
-                    ),
-                  ),
+
                   // next 10 days information
                   Expanded(
                     child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.width20),
                       child: ListView.builder(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
@@ -218,16 +183,20 @@ class _Next5DaysState extends State<Next5Days> {
                             var formattedDate =
                                 DateFormat('EEEE').format(dateList);
                             return Container(
-                              margin: const EdgeInsets.only(bottom: 15),
+                              margin: const EdgeInsets.only(
+                                  bottom: Dimensions.height15),
                               child: ListTile(
-                                leading: SmallText(
-                                  text: formattedDate,
-                                  color: AppColors.whiteColor,
+                                leading: Container(
+                                  alignment: Alignment.centerLeft,
+                                  width: Dimensions.width75,
+                                  child: SmallText(
+                                    text: formattedDate,
+                                    color: AppColors.whiteColor,
+                                  ),
                                 ),
                                 title: Center(
-                                  child: Container(
-                                    width: 100,
-                                    //alignment: Alignment.center,
+                                  child: SizedBox(
+                                    width: Dimensions.width100,
                                     child: Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
@@ -237,8 +206,8 @@ class _Next5DaysState extends State<Next5Days> {
                                               "${getDailyWeatherData()[index].tempMin!.ceil()}",
                                         ),
                                         Container(
-                                          width: 40,
-                                          height: 10,
+                                          width: Dimensions.width40,
+                                          height: Dimensions.height10,
                                           decoration: BoxDecoration(
                                             color: AppColors.blueishColor,
                                             borderRadius:
@@ -254,10 +223,13 @@ class _Next5DaysState extends State<Next5Days> {
                                     ),
                                   ),
                                 ),
-                                trailing: Icon(
-                                  Icons.sunny_snowing,
-                                  color: AppColors.whiteColor,
-                                ),
+                                trailing: SizedBox(
+                                    height: Dimensions.height50,
+                                    width: Dimensions.width50,
+                                    child: Image.network(
+                                      '${_data!.information![index].iconUrl}',
+                                      fit: BoxFit.fitHeight,
+                                    )),
                               ),
                             );
                           }),
@@ -267,9 +239,13 @@ class _Next5DaysState extends State<Next5Days> {
               ),
             );
           } else {
-            return Center(
-              child: CircularProgressIndicator.adaptive(),
+            final spinKit = Center(
+              child: SpinKitDoubleBounce(
+                color: AppColors.blueishColor,
+                size: Dimensions.height100,
+              ),
             );
+            return spinKit;
           }
         },
       ),

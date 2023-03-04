@@ -1,6 +1,7 @@
 class FutureWeather {
   City? city;
   int? cnt;
+
   List<Information>? information;
   FutureWeather({
     this.city,
@@ -49,6 +50,7 @@ class Information {
   int? humidity;
   double? windSpeed;
   String? dtTxt;
+  String? iconUrl;
   List<WeatherInfo>? weatherInfo;
 
   Information({
@@ -60,6 +62,7 @@ class Information {
     this.windSpeed,
     this.weatherInfo,
     this.dtTxt,
+    this.iconUrl,
   });
 
   Information.fromJson(Map<String, dynamic> json) {
@@ -76,6 +79,7 @@ class Information {
         weatherInfo!.add(WeatherInfo.fromJson(v));
       });
     }
+    iconUrl = 'https://openweathermap.org/img/w/${weatherInfo![0].icon}.png';
   }
 }
 

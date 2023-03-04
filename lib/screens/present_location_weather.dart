@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:weather_app/clients/weather_api_client.dart';
 import 'package:weather_app/screens/next_5_days_screen.dart';
 import 'package:weather_app/screens/tomorrow_screen.dart';
+import 'package:weather_app/utils/dimension.dart';
 import '../models/weather_model.dart';
 import '../utils/app_colors.dart';
 import '../utils/reusables.dart';
@@ -62,16 +64,16 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                 backgroundColor: AppColors.blackColor,
                 animSpeedFactor: 2,
                 showChildOpacityTransition: false,
-                height: 120,
+                height: Dimensions.height120,
                 onRefresh: handleRefresh,
                 child: ListView(
                   children: [
                     // app bar
                     Padding(
                       padding: const EdgeInsets.only(
-                        right: 10.0,
-                        top: 15.0,
-                        left: 10.0,
+                        right: Dimensions.height10,
+                        top: Dimensions.height15,
+                        left: Dimensions.height10,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -88,42 +90,43 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                             ],
                           ),
                           Container(
-                            height: 50,
-                            width: 50,
+                            height: Dimensions.height50,
+                            width: Dimensions.width50,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
+                              borderRadius:
+                                  BorderRadius.circular(Dimensions.radius15),
                               color: AppColors.blueishColor.withOpacity(0.2),
                             ),
                             child: Image.asset(
                               "assets/icon/menu.png",
                               color: AppColors.whiteColor.withOpacity(0.7),
-                              scale: 25,
+                              scale: Dimensions.height25,
                             ),
                           ),
                         ],
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: Dimensions.height20,
                     ),
                     SizedBox(
                       // size of the weather of the location informantion
-                      height: 90,
+                      height: Dimensions.height90,
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: Dimensions.width20),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 // temperature of the enviroment
                                 AppText(
                                   text: "${data!.temp!.ceil()}°",
                                   weight: FontWeight.bold,
-                                  size: 50,
-                                  letterspacing: 4.0,
+                                  size: Dimensions.height50,
+                                  letterspacing: 2.0,
                                 ),
                                 // the type of the weather
                                 SmallText(
@@ -132,24 +135,28 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                               ],
                             ),
                             // icon for the weather
-                            const Icon(
-                              Icons.sunny,
-                              color: Colors.orange,
-                              size: 60,
-                            ),
+                            SizedBox(
+                                height: Dimensions.height200,
+                                width: Dimensions.height150,
+                                child: Image.network(
+                                  '${data!.iconUrl}',
+                                  fit: BoxFit.cover,
+                                )),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: Dimensions.height20,
                     ),
                     // weather information
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      height: 100,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.width20),
+                      height: Dimensions.height100,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.height15),
                         color: AppColors.blueishColor.withOpacity(0.15),
                       ),
                       child: Row(
@@ -165,12 +172,13 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                       ),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: Dimensions.height25,
                     ),
                     // creating the tab view for the different options using a list view builder
                     Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
-                      height: 50,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.width20),
+                      height: Dimensions.height50,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: weatherOptions.length,
@@ -194,8 +202,9 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                                 }
                               },
                               child: Container(
-                                margin: const EdgeInsets.only(right: 20),
-                                height: 20,
+                                margin: const EdgeInsets.only(
+                                    right: Dimensions.width20),
+                                height: Dimensions.height20,
                                 child: Column(
                                   children: [
                                     Text(
@@ -219,13 +228,13 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                           }),
                     ),
                     const SizedBox(
-                      height: 15,
+                      height: Dimensions.height15,
                     ),
                     // items for the today tab bar
                     // display it with a listview
                     Container(
-                      margin: const EdgeInsets.only(left: 20),
-                      height: 120,
+                      margin: const EdgeInsets.only(left: Dimensions.width20),
+                      height: Dimensions.height120,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: weatherData.length,
@@ -235,31 +244,32 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                           }),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: Dimensions.height25,
                     ),
                     // a container containing the map of the current location
                     Container(
-                      height: 220,
-                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      height: Dimensions.height220,
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: Dimensions.height20),
                       decoration: BoxDecoration(
                         color: AppColors.blueishColor.withOpacity(0.15),
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.radius15),
                       ),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: Dimensions.height20,
                     )
                   ],
                 ),
               );
             } else {
-              return Center(
-                child: CircularProgressIndicator.adaptive(),
+              final spinKit = SpinKitDoubleBounce(
+                color: AppColors.blueishColor,
+                size: Dimensions.height100,
               );
+              return spinKit;
             }
-            // } else {
-            //   return Text("No Weather available");
-            // }
           },
         ),
       ),

@@ -4,6 +4,7 @@ class Weather {
   double? temp;
   double? wind;
   int? humidity;
+  String? iconUrl;
   int? pressure;
   List<WeatherModel>? weather;
 
@@ -14,6 +15,7 @@ class Weather {
     this.wind,
     this.humidity,
     this.pressure,
+    this.iconUrl,
   });
 
   Weather.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class Weather {
         weather!.add(WeatherModel.fromJson(v));
       });
     } else {}
+    iconUrl = 'https://openweathermap.org/img/w/${weather![0].icon}.png';
   }
 }
 
@@ -69,14 +72,5 @@ class WeatherModel {
     main = json['main'];
     description = json['description'];
     icon = json['icon'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = this.id;
-    data['main'] = this.main;
-    data['description'] = this.description;
-    data['icon'] = this.icon;
-    return data;
   }
 }
