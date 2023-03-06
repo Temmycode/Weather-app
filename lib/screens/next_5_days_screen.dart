@@ -19,21 +19,15 @@ class Next5Days extends StatefulWidget {
 class _Next5DaysState extends State<Next5Days> {
   FutureWeather? _data;
   final WeahterApiClient _weather = WeahterApiClient();
-  getFutureData() async {
+  Future getFutureData() async {
     _data = await _weather.get5DayData();
-  }
-
-  @override
-  void initState() {
-    getFutureData();
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: getFutureData(),
+        future: Future.wait([getFutureData()]),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
             return SafeArea(

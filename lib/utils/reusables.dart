@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:weather_app/utils/small_text.dart';
 import 'app_colors.dart';
+import 'dimension.dart';
 
 Widget reuseableColumn(String image, String text, String smallText) {
   return Column(
@@ -27,7 +29,16 @@ List<String> weatherOptions = [
   "Next 5 days",
 ];
 
-Widget reusableContainer(String text, IconData icon, String temperature) {
+String convertTime(String time) {
+  final dateTime = DateFormat('HH:mm').parse(time);
+  final format = DateFormat('h a');
+  return format.format(dateTime);
+}
+
+Widget reusableContainer(String text, String image, String temperature) {
+  text = text.substring(11, 18);
+  text = convertTime(text);
+
   return Container(
     margin: const EdgeInsets.only(right: 10),
     height: 110,
@@ -43,9 +54,15 @@ Widget reusableContainer(String text, IconData icon, String temperature) {
         SmallText(
           text: text,
         ),
-        Icon(icon),
+        SizedBox(
+            height: Dimensions.height55,
+            width: Dimensions.height55,
+            child: Image.network(
+              image,
+              fit: BoxFit.cover,
+            )),
         SmallText(
-          text: temperature,
+          text: '$temperature°',
           weight: FontWeight.w600,
           color: AppColors.whiteColor,
         )

@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:weather_app/clients/weather_api_client.dart';
+import 'package:weather_app/models/future_weather_model.dart';
 import 'package:weather_app/screens/next_5_days_screen.dart';
 import 'package:weather_app/screens/tomorrow_screen.dart';
 import 'package:weather_app/utils/dimension.dart';
@@ -22,33 +23,27 @@ class CurrentLocationweather extends StatefulWidget {
 
 class _CurrentLocationweatherState extends State<CurrentLocationweather> {
   int _index = 0;
-  List weatherData = [
-    ["10 am", Icons.sunny, "16°"],
-    ["11 am", Icons.water_drop, "18°"],
-    ["12 pm", Icons.storm, "20°"],
-    ["13 pm", Icons.water_drop, "20°"],
-    ["14 pm", Icons.sunny, "22°"],
-  ];
-
   WeahterApiClient client = WeahterApiClient();
   Weather? data;
+  FutureWeather? futureData;
 
   String formattedDate = DateFormat('d MMMM, EEEE').format(DateTime.now());
 
-  Future<void> handleRefresh() async {
-    //setState(() {});
+  Future<void> _handleRefresh() async {
+    // setState(() {});
     await client.getData();
-    return await Future.delayed(const Duration(seconds: 1));
+    await client.get3HoursData();
+    return await Future.delayed(const Duration(seconds: 2));
   }
 
-  getData() async {
+  // to get the api for the current weather
+  Future _getData() async {
     data = await client.getData();
   }
 
-  @override
-  void initState() {
-    getData();
-    super.initState();
+  // to get the api data for the various time changes
+  Future _get3HourTimeInterval() async {
+    futureData = await client.get3HoursData();
   }
 
   @override
@@ -56,7 +51,7 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder(
-          future: getData(),
+          future: Future.wait([_getData(), _get3HourTimeInterval()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return LiquidPullToRefresh(
@@ -65,7 +60,7 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                 animSpeedFactor: 2,
                 showChildOpacityTransition: false,
                 height: Dimensions.height120,
-                onRefresh: handleRefresh,
+                onRefresh: _handleRefresh,
                 child: ListView(
                   children: [
                     // app bar
@@ -237,10 +232,14 @@ class _CurrentLocationweatherState extends State<CurrentLocationweather> {
                       height: Dimensions.height120,
                       child: ListView.builder(
                           scrollDirection: Axis.horizontal,
-                          itemCount: weatherData.length,
+                          itemCount: futureData!.cnt,
                           itemBuilder: (context, index) {
-                            return reusableContainer(weatherData[index][0],
-                                weatherData[index][1], weatherData[index][2]);
+                            return reusableContainer(
+                                futureData!.information![index].dtTxt!,
+                                futureData!.information![index].iconUrl!,
+                                futureData!.information![index].temp!
+                                    .ceil()
+                                    .toString());
                           }),
                     ),
                     const SizedBox(

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
-import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:weather_app/clients/weather_api_client.dart';
 import 'package:weather_app/models/future_weather_model.dart';
-import 'package:weather_app/screens/next_5_days_screen.dart';
 import 'package:weather_app/utils/dimension.dart';
 import '../utils/app_colors.dart';
 import '../utils/reusables.dart';
@@ -20,35 +17,19 @@ class TomorrowWeather extends StatefulWidget {
 }
 
 class _TomorrowWeatherState extends State<TomorrowWeather> {
-  int _index = 1;
-  List weatherData = [
-    ["10 am", Icons.sunny, "16°"],
-    ["11 am", Icons.water_drop, "18°"],
-    ["12 pm", Icons.storm, "20°"],
-    ["13 pm", Icons.water_drop, "20°"],
-    ["14 pm", Icons.sunny, "22°"],
-  ];
-
   WeahterApiClient client = WeahterApiClient();
   FutureWeather? data;
+  FutureWeather? tommorrow;
 
   String formattedDate = DateFormat('d MMMM, EEEE')
       .format(DateTime.now().add(const Duration(days: 1)));
 
-  Future<void> handleRefresh() async {
-    //setState(() {});
-    await client.getData();
-    return await Future.delayed(const Duration(seconds: 1));
-  }
-
-  getData() async {
+  Future _getData() async {
     data = await client.get5DayData();
   }
 
-  @override
-  void initState() {
-    getData();
-    super.initState();
+  Future _getTomorrowData() async {
+    tommorrow = await client.getTomorrowData();
   }
 
   @override
@@ -56,7 +37,7 @@ class _TomorrowWeatherState extends State<TomorrowWeather> {
     return Scaffold(
       body: SafeArea(
         child: FutureBuilder(
-          future: getData(),
+          future: Future.wait([_getData(), _getTomorrowData()]),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return ListView(
@@ -226,10 +207,34 @@ class _TomorrowWeatherState extends State<TomorrowWeather> {
                     height: 120,
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
-                        itemCount: weatherData.length,
+                        itemCount: tommorrow!.cnt,
                         itemBuilder: (context, index) {
-                          return reusableContainer(weatherData[index][0],
-                              weatherData[index][1], weatherData[index][2]);
+                          // var weatherData = futureData!.information;
+                          // List<Information> getDailyWeatherData() {
+                          //   List<Information> dailyData = [];
+                          //   // Initialize the first day with the first weather data
+                          //   DateTime currentDay =
+                          //       DateTime.parse(weatherData![0].dtTxt!);
+                          //   dailyData.add(weatherData[0]);
+                          //   for (int i = 1; i < weatherData.length; i++) {
+                          //     DateTime dateTime =
+                          //         DateTime.parse(weatherData[i].dtTxt!);
+                          //     // If the current data's day is different from the previous data's day, add it to the list
+                          //     if (dateTime.day != currentDay.day) {
+                          //       dailyData.add(weatherData[i]);
+                          //       currentDay = dateTime;
+                          //     }
+                          //   }
+                          //   return dailyData;
+                          // }
+
+                          // var
+                          return reusableContainer(
+                              tommorrow!.information![index].dtTxt!,
+                              tommorrow!.information![index].iconUrl!,
+                              tommorrow!.information![index].temp!
+                                  .ceil()
+                                  .toString());
                         }),
                   ),
                   const SizedBox(

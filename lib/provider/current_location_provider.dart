@@ -48,3 +48,7 @@ class PrintPostion extends State<PrintPosition> {
     );
   }
 }
+
+class CntValueProvider extends ChangeNotifier {
+  int cntNumber = 0;
+}

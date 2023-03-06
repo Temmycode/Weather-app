@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 class FutureWeather {
   City? city;
   int? cnt;
@@ -48,7 +50,7 @@ class Information {
   double? tempMax;
   int? pressure;
   int? humidity;
-  double? windSpeed;
+  var windSpeed;
   String? dtTxt;
   String? iconUrl;
   List<WeatherInfo>? weatherInfo;
